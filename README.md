@@ -2,7 +2,7 @@
 
 Accompanying code for the paper ``Estimating the Prevalence of Multiple Chronic Diseases via Maximum Entropy``
 
-To reproduce the procedure exactly as we have followed in the paper, we need to generate synthetic datasets ($`\Delta_0, \Delta_1, \Delta_2`$) and run $`\textsc{MaxEnt-MCC}`$ on the obtained synthetic datasets. We also used a compute cluster to parallelize the synthetic data generation and maxEnt algorithm processing. In this document, we first outline the procedure for running Algorithm 1 ($`\textsc{Maxent-MCC}`$) on the MEPS data and then proceed to describe the synthetic data generation process in detail. 
+To reproduce the procedure exactly as we have followed in the paper, we need to generate synthetic datasets ``($\Delta_0, \Delta_1, \Delta_2`$)`` and run ``$\textsc{MaxEnt-MCC}$`` on the obtained synthetic datasets. We also used a compute cluster to parallelize the synthetic data generation and maxEnt algorithm processing. In this document, we first outline the procedure for running Algorithm 1 ``(\textsc{Maxent-MCC})`` on the MEPS data and then proceed to describe the synthetic data generation process in detail. 
 
 ## Install software dependencies  
 ```
