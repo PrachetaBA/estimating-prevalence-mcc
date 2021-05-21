@@ -25,7 +25,7 @@ For a thorough description of the output files produced, see code documentation 
 ## Synthetic data experiments
 Run all commands from the ``src/`` folder unless explicitly specified. 
 
-### ``GenSynthDatasets()``  
+### GenSynthDatasets
 1. Generate synthetic data parameters: 
 ``python generate_params.py ds_n`` where ds_n represents the dataset number (**1,2,3**) corresponding to the three different datasets ``Delta_0, Delta_1, Delta_2`` we need to generate for futher experiments. 
 2. Generate synthetic data: 
