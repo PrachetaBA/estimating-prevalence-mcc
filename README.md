@@ -2,7 +2,7 @@
 
 Accompanying code for the paper ``Estimating the Prevalence of Multiple Chronic Diseases via Maximum Entropy``
 
-To reproduce the procedure exactly as we have followed in the paper, we need to generate synthetic datasets ``($\Delta_0, \Delta_1, \Delta_2`$)`` and run ``$\textsc{MaxEnt-MCC}$`` on the obtained synthetic datasets. We also used a compute cluster to parallelize the synthetic data generation and maxEnt algorithm processing. In this document, we first outline the procedure for running Algorithm 1 ``(\textsc{Maxent-MCC})`` on the MEPS data and then proceed to describe the synthetic data generation process in detail. 
+To reproduce the procedure exactly as we have followed in the paper, we need to generate synthetic datasets ``(Delta_0, Delta_1, Delta_2)`` and run ``MaxEnt-MCC`` on the obtained synthetic datasets. We also used a compute cluster to parallelize the synthetic data generation and maxEnt algorithm processing. In this document, we first outline the procedure for running Algorithm 1 (``MaxEnt-MCC``) on the MEPS data and then proceed to describe the synthetic data generation process in detail. 
 
 ## Install software dependencies  
 ```
@@ -15,7 +15,7 @@ pip install -r pip-requirements.txt
 conda create --name <env> --file requirements.txt
 ```
 
-## Run $`\textsc{MaxEnt-MCC}`$
+## Run ``MaxEnt-MCC``
 ```
 cd src/
 python meps_maxent.py
@@ -25,9 +25,9 @@ For a thorough description of the output files produced, see code documentation 
 ## Synthetic data experiments
 Run all commands from the ``src/`` folder unless explicitly specified. 
 
-### $`\textsc{GenSynthDatasets(\Gamma)}`$  
+### ``GenSynthDatasets()``  
 1. Generate synthetic data parameters: 
-``python generate_params.py ds_n`` where ds_n represents the dataset number (**1,2,3**) corresponding to the three different datasets ($\Delta_0, \Delta_1, \Delta_2$) we need to generate for futher experiments. 
+``python generate_params.py ds_n`` where ds_n represents the dataset number (**1,2,3**) corresponding to the three different datasets ``Delta_0, Delta_1, Delta_2`` we need to generate for futher experiments. 
 2. Generate synthetic data: 
 ``python generate_data.py ds_n f_n`` where f_n is the file number of the corresponding parameter file, in our experiments this number extends from 1-2100 and ds_n is the dataset number corresponding to the three different datasets
 
@@ -53,7 +53,7 @@ python plot_boxplots_reg.py
 4. Extract the best performing features, create the training dataset and create the predictor for optimal support for unregularized maxEnt: ``python learn_optimal_support.py $ds_n`` where ds_n = 2. 
 
 ### Comparing MaxEnt estimator with MLE estimator.
-1. For synthetic dataset $`\Delta_2`$ (ds_n = 3), we can compare the performance of MaxEnt-MCC with the MLE estimator: ``python maxent_mle.py $f_n`` where f_n ranges from 1-2100. 
+1. For synthetic dataset ``Delta_2`` (ds_n = 3), we can compare the performance of MaxEnt-MCC with the MLE estimator: ``python maxent_mle.py $f_n`` where f_n ranges from 1-2100. 
 2. Calculate the JS distance ``python extract_js.py $keyword`` where the keyword is ``mle``. 
 3. To visualize the JS distance for both MaxEnt and MLE 
 ```
