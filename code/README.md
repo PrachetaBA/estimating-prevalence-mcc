@@ -17,13 +17,13 @@ conda create --name <env> --file requirements.txt
 
 ## Run ``MaxEnt-MCC``
 ```
-cd code/
+cd src/
 python meps_maxent.py
 ```
-For a thorough description of the output files produced, see code documentation in the header of ``code/meps_maxent.py``
+For a thorough description of the output files produced, see code documentation in the header of ``src/meps_maxent.py``
 
 ## Synthetic data experiments
-Run all commands from the ``code/`` folder unless explicitly specified. 
+Run all commands from the ``src/`` folder unless explicitly specified. 
 
 ### GenSynthDatasets
 1. Generate synthetic data parameters: 
@@ -42,7 +42,7 @@ where the keyword is ``support_1`` for the resulting maxent distributions.
 1. For different values of width, run regularized maxent: ``python test_regularization.py $f_n $w_n`` (where f_n specifies the file number ranging from 1-2100 and w_n is the width number ranging from 0-15, 0 being unregularized maxent and 1-15 being different values for the width parameter W)
 2. To visualize the JS distance for both MaxEnt and MLE 
 ```
-cd code/output/plots
+cd output/plots
 python plot_boxplots_reg.py
 ```
 
@@ -57,6 +57,6 @@ python plot_boxplots_reg.py
 2. Calculate the JS distance ``python extract_js.py $keyword`` where the keyword is ``mle``. 
 3. To visualize the JS distance for both MaxEnt and MLE 
 ```
-cd code/output/plots
+cd output/plots
 python plot_boxplots_mle.py
 ```

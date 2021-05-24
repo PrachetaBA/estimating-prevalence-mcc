@@ -188,7 +188,7 @@ def get_data_char(cleaneddata):
             plt.xlabel("Number of diseases")
             plt.ylabel("Proportion of people having x number of diseases")
             plt.legend()
-            plt.savefig('../figures/meps_prevalence_fit.png')
+            plt.savefig('figures/meps_prevalence_fit.png')
 
         return popt[0]
     
@@ -229,7 +229,7 @@ def main(time_calc=True):
     scaled_pi_s = (pi_s - 1.0)/(1.8 - 1.0)
 
     # Retrieve random forest regressor model, and use it for predicting support
-    predictor = read_model('../output/support_predictor_2.pickle')
+    predictor = read_model('output/support_predictor_2.pickle')
     covariates = np.array([scaled_d, scaled_N, scaled_pi_s]).reshape(1,-1)
 
     # Convert to polynomial features 
@@ -294,11 +294,11 @@ def main(time_calc=True):
     df = pd.concat([df1, df2, df3])
 
     # Write all constraints to CSV file 
-    df.to_csv('../output/meps_prev_cons.csv', index=False)
+    df.to_csv('output/meps_prev_cons.csv', index=False)
 
     # Write support values to a csv file
     df = df.sort_values(by=['Support'], ascending=False)
-    df.to_csv('../output/meps_prev_support.csv', index=False)
+    df.to_csv('output/meps_prev_support.csv', index=False)
 
     # Step 6: Call on the L-BFGS-B optimizer to find the appropriate theta and run maximum entropy 
     opt = Optimizer_robust(feats, 1.0)
@@ -322,7 +322,7 @@ def main(time_calc=True):
     sorted_vecprob = OrderedDict(sorted(pot_zeros.items(), key=itemgetter(1), reverse=True))
 
     # Store the zero vectors in a pickle file
-    with open("../output/meps_prev_zeroemp.pickle", 'wb') as outfile: 
+    with open("output/meps_prev_zeroemp.pickle", 'wb') as outfile: 
         pickle.dump(sorted_vecprob, outfile)
 
     # Print the top 25 zero probability vectors
@@ -332,7 +332,7 @@ def main(time_calc=True):
         print([inv_mappings[x] for x in np.nonzero(k)[0]], ' : ', v)
    
     # Step 10: Store the probabilities in the corresponding output file
-    outfilename = '../output/meps_prevalence_output.pickle'
+    outfilename = 'output/meps_prevalence_output.pickle'
     with open(outfilename, "wb") as outfile:
         pickle.dump((maxent, sum_prob_maxent, emp, sum_prob_emp, num_constraints, support), outfile)
     

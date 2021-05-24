@@ -81,10 +81,10 @@ def calc_div_mle(f):
 	Returns the power divergence of maxent vs. true probability distribution 
 	as well as MLE vs. true probability distribution, returns NaN if there is an error
 	"""
-	maxent_file = '../output/mle_expts/synthetic_data_'+str(f)+'.pickle'
+	maxent_file = 'output/mle_expts/synthetic_data_'+str(f)+'.pickle'
 
 	# Check if directory exists 
-    expts_directory = '../output/mle_expts/'
+    expts_directory = 'output/mle_expts/'
     if not os.path.isdir(expts_directory): 
         os.makedirs(expts_directory)
         print("Create directory: ", expts_directory)
@@ -97,7 +97,7 @@ def calc_div_mle(f):
 	else: 
 		maxent_dist = output 
 
-	emp_file = '../output/mle_expts/synthetic_data_'+str(f)+'_mle.pickle'
+	emp_file = 'output/mle_expts/synthetic_data_'+str(f)+'_mle.pickle'
 	output = read_maxent_prob_mle(emp_file)
 
 	# Sanity Check: Errors in the file 
@@ -140,21 +140,21 @@ def calc_div_support(f, s, keyword):
 	"""
 	
 	# Sanity check: if directory exists, else create it 
-    expts1_directory = '../output/support_expts_1/'
+    expts1_directory = 'output/support_expts_1/'
     if not os.path.isdir(expts1_directory): 
         os.makedirs(expts1_directory)
         print("Create directory: ", expts1_directory)
 
-    expts2_directory = '../output/support_expts_2/'
+    expts2_directory = 'output/support_expts_2/'
     if not os.path.isdir(expts2_directory): 
         os.makedirs(expts2_directory)
         print("Create directory: ", expts2_directory)
 
 	# Step 1: Retrieve maxent probability distribution
 	if keyword == 'support_1':
-		maxent_file = '../output/support_expts_1/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
+		maxent_file = 'output/support_expts_1/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
 	elif keyword == 'support_2':
-		maxent_file = '../output/support_expts_2/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
+		maxent_file = 'output/support_expts_2/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
 
 	output = read_maxent_prob_support(maxent_file)
 
@@ -198,16 +198,16 @@ def calc_div_width(f, w):
 	"""
 	
 	# Sanity check if directory exists 
-    reg_directory = '../output/reg_expts/'
+    reg_directory = 'output/reg_expts/'
     if not os.path.isdir(reg_directory): 
         os.makedirs(reg_directory)
         print("Create directory: ", reg_directory)
 
 	# Step 1: Retrieve maxent probability distribution
 	if w == 0:
-		maxent_file = '../output/reg_expts/synthetic_data_'+str(f)+'_ur.pickle'
+		maxent_file = 'output/reg_expts/synthetic_data_'+str(f)+'_ur.pickle'
 	else: 
-		maxent_file = '../output/reg_expts/synthetic_data_'+str(f)+'_w'+str(w)+'.pickle'
+		maxent_file = 'output/reg_expts/synthetic_data_'+str(f)+'_w'+str(w)+'.pickle'
 	output = read_maxent_prob_width(maxent_file)
 
 	# Sanity Check: Errors in the file 

@@ -100,7 +100,7 @@ def calc_maxent(file_num, width_num=None, time_calc=True):
     scaled_pi_s = (pi_s - 1.0)/(1.8 - 1.0)
 
     # Retrieve random forest regressor model, and use it for predicting support
-    predictor = read_model('../output/support_predictor_1.pickle')
+    predictor = read_model('output/support_predictor_1.pickle')
     covariates = np.array([scaled_d, scaled_N, scaled_pi_s]).reshape(1,-1)
 
     # Convert to polynomial features 
@@ -181,7 +181,7 @@ def calc_maxent(file_num, width_num=None, time_calc=True):
         print()
 
         # Store the probabilities in the corresponding output file
-        outfilename = '../output/reg_expts/synthetic_data_'+str(file_num)+'_w'+str(width_num)+'.pickle'
+        outfilename = 'output/reg_expts/synthetic_data_'+str(file_num)+'_w'+str(width_num)+'.pickle'
         with open(outfilename, "wb") as outfile:
             pickle.dump((maxent_r_w, sum_prob_maxent_r_w), outfile)
 
@@ -200,7 +200,7 @@ def calc_maxent(file_num, width_num=None, time_calc=True):
         print()
        
         # Store the probabilities in the corresponding output file
-        outfilename = '../output/reg_expts/synthetic_data_'+str(file_num)+'_ur.pickle'
+        outfilename = 'output/reg_expts/synthetic_data_'+str(file_num)+'_ur.pickle'
         with open(outfilename, "wb") as outfile:
             pickle.dump((maxent_ur, sum_prob_maxent_ur), outfile)
         

@@ -10,7 +10,7 @@ Main Requirements:
 mlxtend version = 0.17.2
 python = 3.7.3
 """
-import pickle, itertools, sys, time, os.path
+import pickle, itertools, sys, time, os.path 
 import numpy as np
 import pandas as pd
 from mlxtend.frequent_patterns import fpgrowth
@@ -23,6 +23,7 @@ from codebase.utils import clean_preproc_data
 from codebase.utils import clean_preproc_data_real
 from codebase.extract_features import ExtractFeatures
 from codebase.optimizer import Optimizer
+from codebase.robust_optimizer import Optimizer as Optimizer_robust
 from codebase.mba import marketbasket
 
 # Function to read the probability distribution from the pickle file
@@ -91,9 +92,8 @@ def main(file_num=None, sup_num=None, time_calc=True):
     print() 
     
     # Generating synthetic data
-    synthetic_data_file = '../data/synthetic_data_1/synthetic_data_'+str(file_num)+'.csv' 
+    synthetic_data_file = '../data/synthetic_data_2/synthetic_data_'+str(file_num)+'.csv' 
     
-
     # Sanity check to see if file exists (Just in case there was an error in generating the file)
     file_flag = os.path.isfile(synthetic_data_file)
     if file_flag == False:
@@ -136,7 +136,8 @@ def main(file_num=None, sup_num=None, time_calc=True):
     print("The number of frequent itemset constraints are: \n", num_constraints)
 
     # Step 6: Call on the L-BFGS-B optimizer to find the appropriate theta and run maximum entropy 
-    opt = Optimizer(feats)
+    width_param = 1.0
+    opt = Optimizer_robust(feats, width_param)
     soln_opt = opt.solver_optimize()
     if soln_opt == None:
         print('Solution does not converge')             # Error message when the optimizer does not reach convergence
@@ -147,10 +148,10 @@ def main(file_num=None, sup_num=None, time_calc=True):
     print()
    
     # Step 8: Store the probabilities in the corresponding output file
-    outfilename = '../output/support_expts_1/synthetic_data_'+str(file_num)+'_s'+str(sup_num)+'.pickle'
-
+    outfilename = 'output/support_expts_2/synthetic_data_'+str(file_num)+'_s'+str(sup_num)+'.pickle'
+    
     # Check if directory exists 
-    op_directory = '../output/support_expts_1/'
+    op_directory = 'output/support_expts_2/'
     if not os.path.isdir(op_directory): 
         os.makedirs(op_directory)
         print("Create directory: ", op_directory)

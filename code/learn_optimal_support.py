@@ -160,7 +160,7 @@ def optimal_support(ds_n, div=1):
 
 	# """
 	# Save the model after checking which is the best
-	model_file = '../output/support_predictor_'+str(ds_n)+'.pickle'
+	model_file = 'output/support_predictor_'+str(ds_n)+'.pickle'
 	with open(model_file, 'wb') as f: 
 		pickle.dump(ml_lr, f)
 	# """

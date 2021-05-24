@@ -51,7 +51,7 @@ def calc_div(f, s):
 	"""
 	
 	# Step 1: Retrieve maxent probability distribution
-	maxent_file = '../output/support_expts/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
+	maxent_file = 'output/support_expts/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
 	output = read_maxent_prob(maxent_file)
 
 	# Sanity Check: Errors in the file 
