@@ -149,6 +149,13 @@ def main(file_num=None, sup_num=None, time_calc=True):
    
     # Step 8: Store the probabilities in the corresponding output file
     outfilename = '../output/support_expts_2/synthetic_data_'+str(file_num)+'_s'+str(sup_num)+'.pickle'
+    
+    # Check if directory exists 
+    op_directory = '../output/support_expts_2/'
+    if not os.path.isdir(op_directory): 
+        os.makedirs(op_directory)
+        print("Create directory: ", op_directory)
+
     with open(outfilename, "wb") as outfile:
         pickle.dump((maxent, sum_prob_maxent, emp_prob, num_constraints, support), outfile)
     

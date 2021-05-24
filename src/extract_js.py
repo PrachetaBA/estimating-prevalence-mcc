@@ -82,6 +82,13 @@ def calc_div_mle(f):
 	as well as MLE vs. true probability distribution, returns NaN if there is an error
 	"""
 	maxent_file = '../output/mle_expts/synthetic_data_'+str(f)+'.pickle'
+
+	# Check if directory exists 
+    expts_directory = '../output/mle_expts/'
+    if not os.path.isdir(expts_directory): 
+        os.makedirs(expts_directory)
+        print("Create directory: ", expts_directory)
+
 	output = read_maxent_prob_mle(maxent_file)
 
 	# Sanity Check: Errors in the file 
@@ -132,11 +139,23 @@ def calc_div_support(f, s, keyword):
 	there is an error
 	"""
 	
+	# Sanity check: if directory exists, else create it 
+    expts1_directory = '../output/support_expts_1/'
+    if not os.path.isdir(expts1_directory): 
+        os.makedirs(expts1_directory)
+        print("Create directory: ", expts1_directory)
+
+    expts2_directory = '../output/support_expts_2/'
+    if not os.path.isdir(expts2_directory): 
+        os.makedirs(expts2_directory)
+        print("Create directory: ", expts2_directory)
+
 	# Step 1: Retrieve maxent probability distribution
 	if keyword == 'support_1':
 		maxent_file = '../output/support_expts_1/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
 	elif keyword == 'support_2':
 		maxent_file = '../output/support_expts_2/synthetic_data_'+str(f)+'_s'+str(s)+'.pickle'
+
 	output = read_maxent_prob_support(maxent_file)
 
 	# Sanity Check: Errors in the file 
@@ -178,6 +197,12 @@ def calc_div_width(f, w):
 	there is an error
 	"""
 	
+	# Sanity check if directory exists 
+    reg_directory = '../output/reg_expts/'
+    if not os.path.isdir(reg_directory): 
+        os.makedirs(reg_directory)
+        print("Create directory: ", reg_directory)
+
 	# Step 1: Retrieve maxent probability distribution
 	if w == 0:
 		maxent_file = '../output/reg_expts/synthetic_data_'+str(f)+'_ur.pickle'

@@ -10,7 +10,7 @@ Main Requirements:
 mlxtend version = 0.17.2
 python = 3.7.3
 """
-import pickle, itertools, sys, time, os.path 
+import pickle, itertools, sys, time, os.path
 import numpy as np
 import pandas as pd
 from mlxtend.frequent_patterns import fpgrowth
@@ -93,6 +93,7 @@ def main(file_num=None, sup_num=None, time_calc=True):
     # Generating synthetic data
     synthetic_data_file = '../data/synthetic_data_1/synthetic_data_'+str(file_num)+'.csv' 
     
+
     # Sanity check to see if file exists (Just in case there was an error in generating the file)
     file_flag = os.path.isfile(synthetic_data_file)
     if file_flag == False:
@@ -147,6 +148,13 @@ def main(file_num=None, sup_num=None, time_calc=True):
    
     # Step 8: Store the probabilities in the corresponding output file
     outfilename = '../output/support_expts_1/synthetic_data_'+str(file_num)+'_s'+str(sup_num)+'.pickle'
+
+    # Check if directory exists 
+    op_directory = '../output/support_expts_1/'
+    if not os.path.isdir(op_directory): 
+        os.makedirs(op_directory)
+        print("Create directory: ", op_directory)
+
     with open(outfilename, "wb") as outfile:
         pickle.dump((maxent, sum_prob_maxent, emp_prob, num_constraints, support), outfile)
     

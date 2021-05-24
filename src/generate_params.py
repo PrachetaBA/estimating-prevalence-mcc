@@ -7,7 +7,7 @@ Created on Thu Feb  25 22:20:20 2021
 
 from multiprocessing import Process
 import numpy as np
-import sys, random, csv
+import sys, random, csv, os
 
 path_to_codebase = 'codebase/'
 sys.path.insert(0, path_to_codebase)
@@ -59,6 +59,12 @@ class Synthetic_object(object):
 			for sc in scale_params: 
 				new_c = c + [sc]
 				key_features.append(new_c)
+
+		# Check if folder exists, if not create it. 
+		directory = '../data/parameters/'
+		if not os.path.isdir(directory): 
+			os.makedirs(directory)
+			print("Created directory: ", directory)
 
 		# File where all parameters are stored
 		parameter_file = '../data/parameters/parameters_'+str(ds_n)+'.csv'

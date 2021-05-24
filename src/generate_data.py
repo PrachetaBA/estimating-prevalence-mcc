@@ -7,7 +7,7 @@ Created on Thu Feb  25 22:20:20 2021
 from multiprocessing import Process
 import numpy as np
 import pandas as pd 
-import sys, random, csv, re
+import sys, random, csv, re, os
 
 path_to_codebase = 'codebase/'
 sys.path.insert(0, path_to_codebase)
@@ -75,26 +75,21 @@ class Synthetic_object(object):
 		elif flag == False:
 			print("Error in data generation process")
 
-	'''
-	# (OUTLIER DATASETS CHECK) 
-	def get_synthetic_data(self, file_name_synthetic, file_name_real):
-		outlier_counter = 0
-		while True:
-			flag = data_generator.run(file_name_synthetic, N=self.N, pi_s=self.pi_s, theta=self.theta,
-				d=self.d, K=self.K, v=self.v, w_p=self.w_p, w_e=self.w_e, file_name_real=file_name_real, overlap=True)
-			if flag == True: 
-				print("Number of tries: ", outlier_counter)
-				print("Data Generated successfully!")
-				print("Data Helper done!")
-				break 
-			elif flag == False:
-				outlier_counter += 1
-				continue
-	'''
-
 	def main(self):
 		file_name_real = '../data/true_data_'+str(ds_n)+'/truedist_expt_'+str(self.f)+'.pickle'
 		file_name_synthetic = "../data/synthetic_data_"+str(ds_n)+"/synthetic_data_"+str(self.f)+".csv"
+
+		# Check if directories for data exists, if not create it.
+		true_data_dir = '../data/true_data_'+str(ds_n)
+		if not os.path.isdir(true_data_dir): 
+			os.makedirs(true_data_dir)
+			print("Created directory: ", true_data_dir)
+
+		synthetic_data_dir = '../data/synthetic_data_'+str(ds_n)
+		if not os.path.isdir(synthetic_data_dir): 
+			os.makedirs(synthetic_data_dir)
+			print("Created directory: ", synthetic_data_dir)
+
 		self.get_synthetic_data(file_name_synthetic, file_name_real)
 
 if __name__ == '__main__':

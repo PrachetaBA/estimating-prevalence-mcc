@@ -32,7 +32,7 @@ Run all commands from the ``src/`` folder unless explicitly specified.
 ``python generate_data.py ds_n f_n`` where f_n is the file number of the corresponding parameter file, in our experiments this number extends from 1-2100 and ds_n is the dataset number corresponding to the three different datasets
 
 ### Learning optimal support 
-1. Generate support data parameters: Run``python generate_support_params.py $ds_n`` where ds_n = 1
+1. Generate support data parameters: Run ``python generate_support_params.py $ds_n`` where ds_n = 1
 2. Run unregularized maxent using 10 different values of support on each of the files ``python synthetic_support_unreg.py $f_n $s_n`` where f_n specifies the file number ranging from 1-2100 and s_n is the support number ranging from 1-10)
 3. Calculate the JS distance ``python extract_js.py $keyword`` 
 where the keyword is ``support_1`` for the resulting maxent distributions. 
