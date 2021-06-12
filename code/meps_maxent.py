@@ -284,21 +284,17 @@ def main(time_calc=True):
     sorted_three = sorted(triple_constraints.items(), key=itemgetter(1), reverse=True)
     sorted_four = sorted(quad_constraints.items(), key=itemgetter(1), reverse=True)
 
-    # Print sorted dictionary
-    # print(dict(sorted_three))
-    # print(dict(sorted_four))
-
     df1 = pd.DataFrame.from_records(sorted_two, columns=['Constraints','Support'])
     df2 = pd.DataFrame.from_records(sorted_three, columns=['Constraints','Support'])
     df3 = pd.DataFrame.from_records(sorted_four, columns=['Constraints','Support'])
     df = pd.concat([df1, df2, df3])
 
     # Write all constraints to CSV file 
-    df.to_csv('output/meps_prev_cons.csv', index=False)
+    df.to_csv('../results/meps_prev_cons.csv', index=False)
 
     # Write support values to a csv file
     df = df.sort_values(by=['Support'], ascending=False)
-    df.to_csv('output/meps_prev_support.csv', index=False)
+    df.to_csv('../results/meps_prev_support.csv', index=False)
 
     # Step 6: Call on the L-BFGS-B optimizer to find the appropriate theta and run maximum entropy 
     opt = Optimizer_robust(feats, 1.0)
@@ -327,10 +323,13 @@ def main(time_calc=True):
 
     # Print the top 25 zero probability vectors
     top = list(sorted_vecprob.items())[:25]
-    print("Top 25 vectors that have zero empirical probability")
-    for k, v in top:
-        print([inv_mappings[x] for x in np.nonzero(k)[0]], ' : ', v)
-   
+
+    # Write results to a text file in results
+    with open('../results/maxent_mcc_zeroemp.txt', 'w') as f: 
+        f.write("Top 25 vectors that have zero empirical probability\n")    
+        for k, v in top:
+            f.write('%s : %s \n' %([inv_mappings[x] for x in np.nonzero(k)[0]], v))
+
     # Step 10: Store the probabilities in the corresponding output file
     outfilename = 'output/meps_prevalence_output.pickle'
     with open(outfilename, "wb") as outfile:

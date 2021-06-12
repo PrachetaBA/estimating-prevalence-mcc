@@ -144,26 +144,11 @@ def optimal_support(ds_n, div=1):
 	ml_lr = LinearRegression()
 	ml_lr.fit(poly, labels)
 
-	"""
-	best_model = DecisionTreeRegressor(max_depth=2, random_state=5, criterion='mae')
-	best_model.fit(scaled_f, labels)
-	final_model = RandomForestRegressor(max_depth=2, random_state=4, criterion='mae')
-	final_model.fit(scaled_f, labels)
-	print(final_model.feature_importances_)
-
-	# Analysis of the decision tree model 
-	print(best_model.feature_importances_)
-	print(best_model.tree_)
-	tree.plot_tree(best_model, feature_names=['d','N','pi_s'], filled=True)
-	plt.show() 
-	""" 
-
-	# """
 	# Save the model after checking which is the best
 	model_file = 'output/support_predictor_'+str(ds_n)+'.pickle'
 	with open(model_file, 'wb') as f: 
 		pickle.dump(ml_lr, f)
-	# """
+
 
 if __name__ == '__main__':
 	ds_n = sys.argv[1]
