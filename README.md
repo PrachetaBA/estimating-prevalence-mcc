@@ -28,10 +28,11 @@ This codebase uses relative paths. Run all commands from the ``code/`` folder un
 ### Learn a model to predict optimal min-support 
 #### Generate training data for min-support model 
 1. Generate parameters for min-support training data: Run ``python generate_support_params.py 1`` (The first dataset ``Delta_0`` is used as training data for the min-support model with unregularized maxEnt)
+
 #### Use training data to learn a model that predicts optimal min-support
-2. Run unregularized maxEnt using 10 different values of support for each datum ``python synthetic_support_unreg.py $f_n $s_n`` where f_n specifies the file number ranging from 1-2100 and s_n is the support number ranging from 1-10)
-3. Calculate the Jensen-Shannon distance between the ground-truth distribution and the resulting maxEnt distribution for each datum ``python extract_js.py support_1`` 
-4. To learn a model that predicts the optimal min-support, for each file number ``$f_n``, we extract the min-support that gives us the mininum Jensen-Shannon distance and use the features of these data points to train a machine-learning model: ``python learn_optimal_support.py 1`` 
+1. Run unregularized maxEnt using 10 different values of support for each datum ``python synthetic_support_unreg.py $f_n $s_n`` where f_n specifies the file number ranging from 1-2100 and s_n is the support number ranging from 1-10)
+2. Calculate the Jensen-Shannon distance between the ground-truth distribution and the resulting maxEnt distribution for each datum ``python extract_js.py support_1`` 
+3. To learn a model that predicts the optimal min-support, for each file number ``$f_n``, we extract the min-support that gives us the mininum Jensen-Shannon distance and use the features of these data points to train many machine-learning (ML) models. This code chooses the model with the highest accuracy as the best predictor: ``python learn_optimal_support.py 1``  
 
 ### Learn optimal value of regularization parameters W 
 1. For a range of values for the width parameter W, run regularized maxEnt on the training data: ``python test_regularization.py $f_n $w_n`` (where f_n specifies the file number ranging from 1-2100 and w_n is the width number ranging from 0-15, 0 being unregularized maxent and 1-15 being different values for the width parameter W)
@@ -45,10 +46,12 @@ These plots were used to analyze and obtain the optimal value of ``W`` used in t
 ### Create final machine-learning model for choosing min-support 
 #### Generate training data for min-support model 
 1. Generate parameters for min-support training data: Run ``python generate_support_params.py 2`` (The second dataset ``Delta_1`` is used as training data for the min-support model with regularized maxEnt)
+
 #### Use training data to learn a model that predicts optimal min-support
-2. Run regularized maxent using 10 different values of support for each datum ``python synthetic_support_reg.py $f_n $s_n``(where f_n specifies the file number ranging from 1-2100 and s_n is the support number ranging from 1-10)
-3. Calculate the Jensen-Shannon distance between the ground-truth distribution and the resulting maxEnt distribution for each datum ``python extract_js.py support_2`` 
-4. To learn a model that predicts the optimal min-support, for each file number ``$f_n``, we extract the min-support that gives us the mininum Jensen-Shannon distance and use the features of these data points to train the final machine-learning model: ``python learn_optimal_support.py 2``
+1. Run regularized maxent using 10 different values of support for each datum ``python synthetic_support_reg.py $f_n $s_n``(where f_n specifies the file number ranging from 1-2100 and s_n is the support number ranging from 1-10)
+2. Calculate the Jensen-Shannon distance between the ground-truth distribution and the resulting maxEnt distribution for each datum ``python extract_js.py support_2`` 
+3. To learn a model that predicts the optimal min-support, for each file number ``$f_n``, we extract the min-support that gives us the mininum Jensen-Shannon distance and use the features of these data points to train the final machine-learning (ML) model. This code generates the scores for all ML models used in the comparison (Linear Regression, Polynomial Regression (degree 2,3,4), Random forest regression (depth 1,2,3), Multi-layer perceptron (layers 2) and Decision tree regression (depth 1,2,3); Table 1 of the Online Supplement) and chooses the model with the highest accuracy as the best predictor (final model):  ``python learn_optimal_support.py 2``  
+Note: Alternately, users can train a ML model of their choice on the data generated. 
 
 ### Comparing MaxEnt estimator with maximum-likelihood estimator.
 1. For synthetic dataset ``Delta_2`` (ds_n = 3), we can compare the performance of MaxEnt-MCC with the MLE estimator: ``python maxent_mle.py $f_n`` where f_n ranges from 1-2100. 

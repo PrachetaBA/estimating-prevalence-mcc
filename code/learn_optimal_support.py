@@ -77,7 +77,8 @@ def optimal_support(ds_n, div=1):
 
 	# Dictionary with all errors: 
 	model_error = -np.inf
-	best_model = "N/A"
+	best_model_text = "N/A"
+	best_model = None
 
 	# Test errors from different machine learning models
 	# Model 1: Linear Regression
@@ -88,7 +89,9 @@ def optimal_support(ds_n, div=1):
 	# Check error and store best model each time 
 	if np.mean(lin_reg_scores) > model_error: 
 		model_error = np.mean(lin_reg_scores)
-		best_model = "Linear Regression"
+		best_model_text = "Linear Regression"
+		best_model = LinearRegression().fit(scaled_f, labels)
+
 
 	# Model 2: Polynomial Regression
 	for degree in [2,3,4,5]:
@@ -98,8 +101,9 @@ def optimal_support(ds_n, div=1):
 		# Check error and store best model each time 
 		if np.mean(poly_scores) > model_error: 
 			model_error = np.mean(poly_scores)
-			best_model = "Polynomial Regression, Degree "+str(degree)
-
+			best_model_text = "Polynomial Regression, Degree "+str(degree)
+			poly = ml_pr.fit_transform(scaled_f)
+			best_model = LinearRegression().fit(poly, labels)
 
 	# Model 3: Random Forest regression 
 	for depth in [1,2,3]:
@@ -110,8 +114,10 @@ def optimal_support(ds_n, div=1):
 		# Check error and store best model each time 
 		if np.mean(rf_scores) > model_error: 
 			model_error = np.mean(rf_scores)
-			best_model = "Random Forest Regression, Depth "+str(depth)
-	# """
+			best_model_text = "Random Forest Regression, Depth "+str(depth)
+			best_model = ml_rf.fit(scaled_f, labels)
+	
+
 	# Model 4: Multi-Layer Perceptron
 	for layer in [2]:
 		ml_nn = MLPRegressor(hidden_layer_sizes=(layer,), random_state=3)
@@ -121,8 +127,9 @@ def optimal_support(ds_n, div=1):
 		# Check error and store best model each time 
 		if np.mean(nn_scores) > model_error: 
 			model_error = np.mean(nn_scores)
-			best_model = "MLP, Hidden Layers "+str(layer)
-	# """ 
+			best_model_text = "MLP, Hidden Layers "+str(layer)
+			best_model = ml_nn.fit(scaled_f, labels)
+
 	# Model 5: Decision Tree Regressor 
 	for depth in [1,2,3]:
 		ml_dt = DecisionTreeRegressor(max_depth=depth, random_state=6, criterion='mae')
@@ -132,22 +139,24 @@ def optimal_support(ds_n, div=1):
 		# Check error and store best model each time 
 		if np.mean(dt_scores) > model_error: 
 			model_error = np.mean(dt_scores)
-			best_model = "Decision Tree Regression, Depth "+str(depth)
+			best_model_text = "Decision Tree Regression, Depth "+str(depth)
+			best_model = ml_dt.fit(scaled_f, labels)
 
 	print()
-	print("BEST MODEL:")
-	print(best_model)
+	print("BEST MODEL: ", best_model_text)
 
-
+	"""
+	# Optinally, save model of our choosing as the best model (Polynomial Regression Degree 3)
 	ml_pr = PolynomialFeatures(degree=3)
 	poly = ml_pr.fit_transform(scaled_f)
-	ml_lr = LinearRegression()
-	ml_lr.fit(poly, labels)
+	best_model = LinearRegression()
+	best_model.fit(poly, labels)
+	"""
 
 	# Save the model after checking which is the best
 	model_file = 'output/support_predictor_'+str(ds_n)+'.pickle'
 	with open(model_file, 'wb') as f: 
-		pickle.dump(ml_lr, f)
+		pickle.dump(best_model, f)
 
 
 if __name__ == '__main__':
