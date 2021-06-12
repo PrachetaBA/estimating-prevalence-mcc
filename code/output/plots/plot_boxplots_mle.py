@@ -67,7 +67,7 @@ def plot_mle():
 
 	# Step 1: Read the power divergence parameters from the width_parameters file 
 	# df = pd.read_csv('../../data/parameters/power_divergence_3.csv')
-	df = pd.read_csv('../../data/parameters/js_distance_3.csv')
+	df = pd.read_csv('../../../data/parameters/js_distance_3.csv')
 
 	# Columns of data to plot 
 	maxent = df['max_d']
@@ -79,7 +79,7 @@ def plot_mle():
 	ax.set_xticklabels(xtick_labels)
 	ax.set_ylabel("JS Distance from ground truth")
 
-	plt.savefig('mle_plot.pdf',dpi=300)
+	# plt.savefig('mle_plot.pdf',dpi=300)
 	plt.show()
 
 if __name__ == '__main__':
