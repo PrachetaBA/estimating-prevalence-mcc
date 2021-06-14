@@ -139,7 +139,7 @@ class ExtractFeatures(object):
 			None
 		"""
 		self.create_partition_graph()
-		print("Partitioning the feature graph", end=' ')
+		# print("Partitioning the feature graph", end=' ')
 
 		def connected_components(neighbors):
 			seen = set()
@@ -155,7 +155,7 @@ class ExtractFeatures(object):
 					yield component(node)
 
 		partitions = []
-		print("and Finding the connected components:")
+		# print("and Finding the connected components:")
 		for comp in connected_components(self.feat_graph):
 			partitions.append(list(comp))
 

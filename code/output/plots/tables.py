@@ -66,6 +66,7 @@ def write_constraints_three():
 	
 	data['Prevalence in US Population'] = data.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
 	data['Number of observations in MEPS'] = data.apply(lambda x: "{:,}".format(x['Number of observations in MEPS']), axis=1)
+	print("Triplet disease constraints: ")
 	print(data) 
 
 def write_constraints_four():
@@ -89,6 +90,7 @@ def write_constraints_four():
 	
 	data['Prevalence in US Population'] = data.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
 	data['Number of observations in MEPS'] = data.apply(lambda x: "{:,}".format(x['Number of observations in MEPS']), axis=1)
+	print("\nQuartet disease constraints: ")
 	print(data) 
 
 
@@ -109,6 +111,7 @@ def write_combinations():
 	df = pd.DataFrame(top_25_converted.items(), columns=['Disease Combinations', 'Prevalence in US Population'])
 
 	df['Prevalence in US Population'] = df.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
+	print("\nTop 25 most prevalent disease combinations having zero empirical prevalence")
 	print(df.to_string(index=False)) 
 
 def calc_combinations(): 
@@ -119,10 +122,10 @@ def calc_combinations():
 	for k, v in top_25.items(): 
 		total += float(v)
 
-	print("Population = ", total*320*10**6)
+	print("\nTotal Population having the top 25 most prevalent disease combinations = ", total*320*10**6)
 
 if __name__ == '__main__':
-	# write_constraints_three()
-	# write_constraints_four()
-	# write_combinations()
+	write_constraints_three()
+	write_constraints_four()
+	write_combinations()
 	calc_combinations()

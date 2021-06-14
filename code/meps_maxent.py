@@ -30,10 +30,15 @@ meps_prevalence_output.pickle
     sum_prob_emp (list): list of length (d+1) containing the disease-cardinalities from the MEPS data
     num_constraints (int): number of FP-Growth constraints included
     support (float): min-support value used for producing above results
+
+The code also prints Tables 4,5,6 as displayed in the paper 
+    Table 4: Triplet combination of diseases; output of the frequent itemset analysis 
+    Table 5: Quartet combination of diseases; output of the frequent itemset anaysis 
+    Table 6: Top 25 disease combinations that have 0 empirical prevalence in the MEPS data
 ---------------------------------------------------------------------------------------------------------------------------
 """
 
-import pickle, itertools, sys, time, os.path
+import pickle, itertools, sys, time, os.path, math, re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
@@ -50,6 +55,11 @@ from codebase.extract_features import ExtractFeatures
 from codebase.robust_optimizer import Optimizer as Optimizer_robust
 from codebase.mba import marketbasket
 from scipy.optimize import curve_fit
+
+# Global variable 
+dictionary_pc = {48:"Thyroid", 49:"Diabetes", 53:"Chol", 89:"Blind", 92:"Otitis", 95:'Nervous', 98:'HBP', 101:'Heart',
+                126:'Upper Resp Infections', 127:'Lung', 128:'Asthma', 133:'Lower Resp', 134:'Upper Resp', 
+                200:'Skin', 203:'Bone', 204:'Joint', 205:'Spondylosis', 211:'Tissue', 651:'Anxiety', 657:'Depression'}
 
 # Function to read the probability distribution from the pickle file
 def read_prob_dist(filename):
@@ -138,9 +148,9 @@ def compute_prob_exact(optobj):
         total_prob += p_vec
         maxent_prob.append(p_vec) 
     
-    print("Maxent prob: ", maxent_sum_diseases)
-    print('Total Probability: ', total_prob)
-    print()
+    # print("Maxent probabilities: ", maxent_sum_diseases)
+    # print('Total Probability: ', total_prob)
+    # print()
 
     return vecprob, maxent_prob, maxent_sum_diseases
 
@@ -238,6 +248,7 @@ def main(time_calc=True):
     support = predictor.predict(poly.fit_transform(covariates))[0]
 
     # Print the support predicted
+    print("Features of the MEPS data and predicted support")
     print("d: ", d, " N: ", N, " pi_s: ", pi_s, " Support: ", support)
 
     # Step 3: Use frequent itemset mining (market-basket analysis) to obtain the pairs, triplets and quartets for constraints
@@ -260,11 +271,11 @@ def main(time_calc=True):
     feats.set_four_way_constraints(four_wayc)
     feats.set_supports(support_dict)
     feats.partition_features()
-    print("The clusters are:\n", feats.feat_partitions)
+    # print("The clusters are:\n", feats.feat_partitions)
 
     # Calculate total number of constraints to be used in the maximum entropy computation
     num_constraints = len(two_wayc) + len(three_wayc) + len(four_wayc) 
-    print("The number of frequent itemset constraints are: \n", num_constraints)
+    print("The number of frequent itemset constraints are: ", num_constraints)
 
     # Post process MEPS constraints and write them to a CSV file 
     # Inverse of mappings from key to value for MEPS codes
@@ -296,21 +307,74 @@ def main(time_calc=True):
     df = df.sort_values(by=['Support'], ascending=False)
     df.to_csv('../results/meps_prev_support.csv', index=False)
 
-    # Step 6: Call on the L-BFGS-B optimizer to find the appropriate theta and run maximum entropy 
+
+    # Step 6: Print the three way and four way constraints 
+    def write_constraints_three():
+        """
+        Function to read in the three way constraints dictionary and output the corresponding combination pair words
+        """
+        three_way_converted = {}
+        three_way_obs = {}
+        for k, v in triple_constraints.items(): 
+            key_str = ""
+            for c in k: 
+                key_str += dictionary_pc[c] + ', '
+            key_str = key_str.rstrip(', ')
+            three_way_converted[key_str] = math.floor(float(v)*320*(10**6))
+            three_way_obs[key_str] = math.floor(float(v)*61166)
+
+        df = pd.DataFrame(three_way_converted.items(), columns=['Disease Combinations','Prevalence in US Population'])
+        df2 = pd.DataFrame(three_way_obs.items(), columns=['Disease Combinations','Number of observations in MEPS'])
+        data = df2.set_index('Disease Combinations').join(df.set_index('Disease Combinations'))
+        data = data.sort_values(by=['Number of observations in MEPS'], ascending=False)
+        
+        data['Prevalence in US Population'] = data.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
+        data['Number of observations in MEPS'] = data.apply(lambda x: "{:,}".format(x['Number of observations in MEPS']), axis=1)
+        print("\nTriplet disease constraints: ")
+        print(data) 
+
+    def write_constraints_four():
+        """
+        Function to read in the four way constraints dictionary and output the corresponding combination pair words
+        """
+        four_way_converted = {}
+        four_way_obs = {}
+        for k, v in quad_constraints.items(): 
+            key_str = ""
+            for c in k: 
+                key_str += dictionary_pc[c] + ', '
+            key_str = key_str.rstrip(', ')
+            four_way_converted[key_str] = math.floor(float(v)*320*(10**6))
+            four_way_obs[key_str] = math.floor(float(v)*61166)
+
+        df = pd.DataFrame(four_way_converted.items(), columns=['Disease Combinations','Prevalence in US Population'])
+        df2 = pd.DataFrame(four_way_obs.items(), columns=['Disease Combinations','Number of observations in MEPS'])
+        data = df2.set_index('Disease Combinations').join(df.set_index('Disease Combinations'))
+        data = data.sort_values(by=['Number of observations in MEPS'], ascending=False)
+        
+        data['Prevalence in US Population'] = data.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
+        data['Number of observations in MEPS'] = data.apply(lambda x: "{:,}".format(x['Number of observations in MEPS']), axis=1)
+        print("\nQuartet disease constraints: ")
+        print(data) 
+
+    write_constraints_three()
+    write_constraints_four()
+
+    # Step 7: Call on the L-BFGS-B optimizer to find the appropriate theta and run maximum entropy 
     opt = Optimizer_robust(feats, 1.0)
     soln_opt = opt.solver_optimize()
     if soln_opt == None:
         print('Solution does not converge')             # Error message when the optimizer does not reach convergence
         return 
 
-    # Step 7: Calculate the maxEnt probabilities using the optimized parameters
+    # Step 8: Calculate the maxEnt probabilities using the optimized parameters
     vecprob, maxent, sum_prob_maxent = compute_prob_exact(opt)
     print()
 
-    # Step 8: Calculate the empirical probabilities 
+    # Step 9: Calculate the empirical probabilities 
     zeros, emp, sum_prob_emp = get_mle_prob(cleaneddata)
 
-    # Step 9: For all zero vectors find the corresponding maxent probabilities
+    # Step 10: For all zero vectors find the corresponding maxent probabilities
     pot_zeros = dict()
     for vector in zeros: 
         pot_zeros[vector] = vecprob[vector]
@@ -323,14 +387,36 @@ def main(time_calc=True):
 
     # Print the top 25 zero probability vectors
     top = list(sorted_vecprob.items())[:25]
+    top_25_meps_code = {}
 
     # Write results to a text file in results
     with open('../results/maxent_mcc_zeroemp.txt', 'w') as f: 
         f.write("Top 25 vectors that have zero empirical probability\n")    
         for k, v in top:
             f.write('%s : %s \n' %([inv_mappings[x] for x in np.nonzero(k)[0]], v))
+            top_25_meps_code[tuple([inv_mappings[x] for x in np.nonzero(k)[0]])] = v 
 
-    # Step 10: Store the probabilities in the corresponding output file
+    def write_combinations():
+        """
+        Function to read in the top 25 most prevalent disease combinations and write their corresponding prevalence in a dataframe
+        """
+        top_25_converted = {}
+        for k, v in top_25_meps_code.items():
+            key_str = ""
+            for c in k: 
+                key_str += dictionary_pc[c] + ', '
+            key_str = key_str.rstrip(', ')
+            top_25_converted[key_str] = math.floor(float(v)*320*(10**6))
+
+        df = pd.DataFrame(top_25_converted.items(), columns=['Disease Combinations', 'Prevalence in US Population'])
+
+        df['Prevalence in US Population'] = df.apply(lambda x: "{:,}".format(x['Prevalence in US Population']), axis=1)
+        print("\nTop 25 most prevalent disease combinations having zero empirical prevalence")
+        print(df.to_string(index=False)) 
+
+    write_combinations()
+
+    # Step 11: Store the probabilities in the corresponding output file
     outfilename = 'output/meps_prevalence_output.pickle'
     with open(outfilename, "wb") as outfile:
         pickle.dump((maxent, sum_prob_maxent, emp, sum_prob_emp, num_constraints, support), outfile)

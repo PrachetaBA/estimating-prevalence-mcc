@@ -32,7 +32,7 @@ def clean_preproc_data_real(filePath):
     col_names = range(0, len(data.columns))
     mappings = dict(zip(disease_numbers, col_names))
 
-    print("The Disease Mappings are: \n", mappings)
+    # print("The Disease Mappings are: \n", mappings)
 
     data.rename(columns=mappings, inplace=True)
     for col in data.columns:
