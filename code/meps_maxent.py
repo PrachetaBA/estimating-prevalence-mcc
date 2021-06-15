@@ -60,6 +60,9 @@ from scipy.optimize import curve_fit
 dictionary_pc = {48:"Thyroid", 49:"Diabetes", 53:"Chol", 89:"Blind", 92:"Otitis", 95:'Nervous', 98:'HBP', 101:'Heart',
                 126:'Upper Resp Infections', 127:'Lung', 128:'Asthma', 133:'Lower Resp', 134:'Upper Resp', 
                 200:'Skin', 203:'Bone', 204:'Joint', 205:'Spondylosis', 211:'Tissue', 651:'Anxiety', 657:'Depression'}
+dictionary_num = {0:"Lung", 1:"Heart", 2:"Lower Resp", 3:"Diabetes", 4:"Tissue", 5:"Joint", 6:"Anxiety", 7:"Skin", 8:"Blind",
+                    9:"Depression", 10:"Upper Resp", 11:"Thyroid", 12:"Otitis", 13:"HBP", 14:"Spondylosis", 15:"Chol", 16:"Upper Resp Infections",
+                    17:"Asthma", 18:"Bone", 19:"Nervous"}
 
 # Function to read the probability distribution from the pickle file
 def read_prob_dist(filename):
@@ -283,13 +286,13 @@ def main(time_calc=True):
 
     pair_constraints = dict()
     for two in two_wayc:
-        pair_constraints[tuple([int(inv_mappings[x]) for x in two])] = round(support_dict[two],4)
+        pair_constraints[tuple([dictionary_num[x] for x in two])] = round(support_dict[two],4)
     triple_constraints = dict()
     for three in three_wayc:
-        triple_constraints[tuple([int(inv_mappings[x]) for x in three])] = round(support_dict[three],4)
+        triple_constraints[tuple([dictionary_num[x] for x in three])] = round(support_dict[three],4)
     quad_constraints = dict()
     for four in four_wayc:
-        quad_constraints[tuple([int(inv_mappings[x]) for x in four])] = round(support_dict[four],4)
+        quad_constraints[tuple([dictionary_num[x] for x in four])] = round(support_dict[four],4)
 
     sorted_two = sorted(pair_constraints.items(), key=itemgetter(1), reverse=True)
     sorted_three = sorted(triple_constraints.items(), key=itemgetter(1), reverse=True)
@@ -316,13 +319,9 @@ def main(time_calc=True):
         three_way_converted = {}
         three_way_obs = {}
         for k, v in triple_constraints.items(): 
-            key_str = ""
-            for c in k: 
-                key_str += dictionary_pc[c] + ', '
-            key_str = key_str.rstrip(', ')
-            three_way_converted[key_str] = math.floor(float(v)*320*(10**6))
-            three_way_obs[key_str] = math.floor(float(v)*61166)
-
+            three_way_converted[k] = math.floor(float(v)*320*(10**6))
+            three_way_obs[k] = math.floor(float(v)*61166)
+            
         df = pd.DataFrame(three_way_converted.items(), columns=['Disease Combinations','Prevalence in US Population'])
         df2 = pd.DataFrame(three_way_obs.items(), columns=['Disease Combinations','Number of observations in MEPS'])
         data = df2.set_index('Disease Combinations').join(df.set_index('Disease Combinations'))
@@ -340,12 +339,8 @@ def main(time_calc=True):
         four_way_converted = {}
         four_way_obs = {}
         for k, v in quad_constraints.items(): 
-            key_str = ""
-            for c in k: 
-                key_str += dictionary_pc[c] + ', '
-            key_str = key_str.rstrip(', ')
-            four_way_converted[key_str] = math.floor(float(v)*320*(10**6))
-            four_way_obs[key_str] = math.floor(float(v)*61166)
+            four_way_converted[k] = math.floor(float(v)*320*(10**6))
+            four_way_obs[k] = math.floor(float(v)*61166)
 
         df = pd.DataFrame(four_way_converted.items(), columns=['Disease Combinations','Prevalence in US Population'])
         df2 = pd.DataFrame(four_way_obs.items(), columns=['Disease Combinations','Number of observations in MEPS'])

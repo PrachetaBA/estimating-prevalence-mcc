@@ -29,17 +29,6 @@ params = {
 	'font.family': 'STIXGeneral',
 	'text.usetex': True
 }
-
-# params = {
-#    'axes.labelsize': 10,
-#    'font.size': 8,
-#    'legend.fontsize': 10,
-#    'xtick.labelsize': 10,
-#    'ytick.labelsize': 10,
-#    'text.usetex': True,
-#    'figure.figsize': [9,6]
-# }
-
 rcParams.update(params)
 
 def plot_mle(): 
@@ -74,13 +63,13 @@ def plot_mle():
 	mle = df['emp_d']
 
 	# Step 3: Plot the boxplots
-	bp = ax.boxplot([maxent, mle], showfliers=True, notch=False)
+	bp = ax.boxplot([maxent, mle], showfliers=True, whis='range', notch=False)
 	xtick_labels = [r'$\hat{p}$', r'$\hat{p}_{ML}$']
 	ax.set_xticklabels(xtick_labels)
 	ax.set_ylabel("JS Distance from ground truth")
 
-	# plt.savefig('mle_plot.pdf',dpi=300)
-	plt.show()
+	plt.savefig('../../figures/mle_plot.pdf',dpi=300)
+	# plt.show()
 
 if __name__ == '__main__':
 	plot_mle()

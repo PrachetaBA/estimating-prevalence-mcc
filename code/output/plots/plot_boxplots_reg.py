@@ -15,14 +15,20 @@ import seaborn as sns
 
 # Parameters for plots
 params = {
-   'axes.labelsize': 12,
-   'font.size': 8,
-   'legend.fontsize': 10,
-   'xtick.labelsize': 10,
-   'ytick.labelsize': 10,
-   'text.usetex': False,
-   'figure.figsize': [10, 7]
-}
+		'xtick.labelsize': 20,
+		'ytick.labelsize': 20,
+		'font.size': 22,
+		'figure.autolayout': True,
+		'figure.figsize': [10.5,6.25],
+		'axes.titlesize' : 22,
+		'axes.labelsize' : 22,
+		'lines.linewidth' : 2,
+		'lines.markersize' : 6,
+		'legend.fontsize': 22,
+		'mathtext.fontset': 'stix',
+		'font.family': 'STIXGeneral',
+		'text.usetex': True
+	}
 rcParams.update(params)
 
 def plot_d9(): 
@@ -45,7 +51,7 @@ def plot_d9():
 	ax.set_axisbelow(True)
 
 	# Step 1: Read the power divergence parameters from the width_parameters file 
-	df = pd.read_csv('../../data/parameters/width_parameters_1.csv')	
+	df = pd.read_csv('../../../data/parameters/width_parameters_1.csv')	
 
 	# Step 2: Filter all extreme outliers (>0 and <70,000) specifically for d = 9 
 	filter = (df['div'] >= 0.0) & (df['d'] == 9)
@@ -76,16 +82,16 @@ def plot_d9():
 	ax.set_xticklabels(xtick_labels)
 	ax.set_xlabel("W")
 	ax.set_ylabel("JS distance from ground truth")
-	ax.set_title("d = 9, With outliers")
+	# ax.set_title("d = 9, With outliers")
 
 	plt.style.use('grayscale')
-	# plt.savefig('W-boxplot-d9.pdf',dpi=300)
-	plt.show()
+	plt.savefig('../../figures/W-boxplot-d9.pdf',dpi=300)
+	# plt.show()
 
 def plot_all(): 
 	# Read CSV file 
 	# Step 1: Read the power divergence parameters from the width_parameters file 
-	df = pd.read_csv('../../data/parameters/width_parameters_1.csv')
+	df = pd.read_csv('../../../data/parameters/width_parameters_1.csv')
 
 	# Step 2: Filter all extreme outliers (>0) 
 	filter = (df['div'] >= 0.0)
@@ -130,10 +136,10 @@ def plot_all():
 	ax.set_xticklabels(xtick_labels)
 	ax.set_xlabel("W")
 	ax.set_ylabel("JS distance from ground truth")
-	ax.set_title("All values of d, W")
+	# ax.set_title("All values of d, W")
 	plt.style.use('grayscale')
-	# plt.savefig('figures/W-boxplot-all-d.pdf',dpi=300)
-	plt.show()
+	plt.savefig('../../figures/W-boxplot-all-d.pdf',dpi=300)
+	# plt.show()
 
 
 def plot_all_split():
@@ -155,7 +161,7 @@ def plot_all_split():
 		ax[r,c].set_axisbelow(True)
 
 		# Step 1: Read the power divergence parameters from the width_parameters file 
-		df = pd.read_csv('../../data/parameters/width_parameters_1.csv')
+		df = pd.read_csv('../../../data/parameters/width_parameters_1.csv')
 
 		# Step 2: Filter all extreme outliers (>0 and <70,000) specifically for d = 9 
 		filter = (df['div'] >= 0.0) & (df['d'] == d)
